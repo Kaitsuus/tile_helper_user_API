@@ -26,7 +26,7 @@ router.get('/:id', async (request, response) => {
   }
 });
 
-router.post('/', requireToken, async (request, response) => {
+router.post('/', async (request, response) => {
   const { email, avatar, languagePreference, password } = request.body;
 
   if (!password || password.length < 3) {
