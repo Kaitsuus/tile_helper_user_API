@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const router = require('express').Router();
 const User = require('../models/userModel');
 const { userExtractor, requireToken } = require('../utils/middleware');
+
 router.use(userExtractor);
 
 router.get('/', async (request, response) => {
@@ -29,17 +30,20 @@ router.get('/:id', async (request, response) => {
 router.post('/', async (request, response) => {
   const { email, avatar, languagePreference, password } = request.body;
 
-  if (!password || password.length < 3) {
-    return response.status(400).json({
-      error: 'invalid password'
-    });
+  // Validate email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return response.status(400).json({ error: 'Invalid email format' });
+  }
+
+  // Validate password length
+  if (password.length < 7) {
+    return response.status(400).json({ error: 'Password must be at least 7 characters long' });
   }
 
   const existingUser = await User.findOne({ email });
   if (existingUser) {
-    return response.status(400).json({
-      error: 'email must be unique'
-    });
+    return response.status(400).json({ error: 'Email must be unique' });
   }
 
   const saltRounds = 10;
@@ -51,7 +55,7 @@ router.post('/', async (request, response) => {
     avatar,
     languagePreference,
     lists: []
-  }); 
+  });
 
   const savedUser = await user.save();
 

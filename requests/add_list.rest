@@ -1,6 +1,6 @@
-POST http://localhost:3003/api/users/647e20ff14b9452a2ba3d800/lists
+POST http://localhost:3003/api/users/647f30dfed9975e3bd5dabcd/lists
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJuYW1lIiwiaWQiOiI2NDdlMjBmZjE0Yjk0NTJhMmJhM2Q4MDAiLCJpYXQiOjE2ODYwMzQ0ODd9.UXnIP8HZI85EfXWKgpzuT-j4bx5ubKkndYvzJR-GuTQ
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAbWFpbC5jb20iLCJpZCI6IjY0N2YzMGRmZWQ5OTc1ZTNiZDVkYWJjZCIsImlhdCI6MTY4NjA1NzQ0Mn0.YuNm6vKy99Y7bPSA89NoeS-E6gxxS38WgLBgtkKpnKQ
 
 {
   "title": "test-2-list"

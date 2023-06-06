@@ -1,19 +1,34 @@
 const mongoose = require("mongoose");
 
-const schema = mongoose.Schema({
-  email: {type:String, required: true,},
+const userSchema = mongoose.Schema({
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    validate: {
+      validator: function (value) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(value);
+      },
+      message: "Invalid email format",
+    },
+  },
   avatar: String,
   languagePreference: String,
-  passwordHash: String,
+  passwordHash: {
+    type: String,
+    required: true,
+    minlength: [7, "Password must be at least 7 characters long"],
+  },
   lists: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'List'
-    }
-  ]
+      ref: "List",
+    },
+  ],
 });
 
-schema.set("toJSON", {
+userSchema.set("toJSON", {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString();
     delete returnedObject._id;
@@ -22,6 +37,6 @@ schema.set("toJSON", {
   },
 });
 
-const User = mongoose.model('User', schema);
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;
