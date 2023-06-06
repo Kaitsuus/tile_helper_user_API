@@ -5,8 +5,8 @@ const listItemSchema = mongoose.Schema({
   list: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'List',
-    required: true
-  }
+    required: true,
+  },
 });
 
 listItemSchema.set('toJSON', {

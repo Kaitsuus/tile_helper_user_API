@@ -17,7 +17,7 @@ router.get('/', async (request, response) => {
 router.get('/:id', async (request, response) => {
   const user = await User.findById(request.params.id).populate('lists', {
     title: 1,
-    items: 1
+    items: 1,
   });
 
   if (user) {
@@ -38,7 +38,9 @@ router.post('/', async (request, response) => {
 
   // Validate password length
   if (password.length < 7) {
-    return response.status(400).json({ error: 'Password must be at least 7 characters long' });
+    return response
+      .status(400)
+      .json({ error: 'Password must be at least 7 characters long' });
   }
 
   const existingUser = await User.findOne({ email });
@@ -54,7 +56,7 @@ router.post('/', async (request, response) => {
     passwordHash,
     avatar,
     languagePreference,
-    lists: []
+    lists: [],
   });
 
   const savedUser = await user.save();

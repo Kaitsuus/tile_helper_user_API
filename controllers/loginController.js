@@ -3,7 +3,6 @@ const bcrypt = require('bcryptjs');
 const router = require('express').Router();
 const User = require('../models/userModel');
 
-
 router.post('/', async (request, response) => {
   const { email, password } = request.body;
 
@@ -12,7 +11,7 @@ router.post('/', async (request, response) => {
 
     if (!user) {
       return response.status(401).json({
-        error: 'Invalid email or password'
+        error: 'Invalid email or password',
       });
     }
 
@@ -20,24 +19,24 @@ router.post('/', async (request, response) => {
 
     if (!passwordCorrect) {
       return response.status(401).json({
-        error: 'Invalid email or password'
+        error: 'Invalid email or password',
       });
     }
 
     const userForToken = {
       email: user.email,
-      id: user._id
+      id: user._id,
     };
 
     const token = jwt.sign(userForToken, process.env.SECRET);
 
     response.status(200).json({
       token,
-      email: user.email
+      email: user.email,
     });
   } catch (error) {
     response.status(500).json({
-      error: 'An error occurred while processing the request'
+      error: 'An error occurred while processing the request',
     });
   }
 });

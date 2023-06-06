@@ -5,8 +5,7 @@ const { userExtractor, requireToken } = require('../utils/middleware');
 router.use(userExtractor);
 
 router.get('/', async (request, response) => {
-  const lists = await List.find({})
-    .populate('user', { email: 1 });
+  const lists = await List.find({}).populate('user', { email: 1 });
 
   response.json(lists);
 });
@@ -43,7 +42,7 @@ router.post('/', requireToken, async (request, response) => {
   response.status(201).json(listToReturn);
 });
 
-router.delete('/:id',requireToken, async (request, response) => {
+router.delete('/:id', requireToken, async (request, response) => {
   const listToDelete = await List.findById(request.params.id);
   if (!listToDelete) {
     return response.status(204).end();

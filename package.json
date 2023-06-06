@@ -7,7 +7,8 @@
     "start": "cross-env NODE_ENV=production node index.js",
     "test": "cross-env NODE_ENV=test jest --verbose --runInBand --forceExit",
     "start:dev": "cross-env NODE_ENV=development nodemon index.js",
-    "start:test": "cross-env NODE_ENV=test node index.js"
+    "start:test": "cross-env NODE_ENV=test node index.js",
+    "format": "prettier --write \"**/*.js\""
   },
   "author": "Kai Jukarainen",
   "license": "MIT",
@@ -30,6 +31,7 @@
     "jest": "^27.5.1",
     "json-server": "^0.17.3",
     "nodemon": "^2.0.22",
+    "prettier": "^2.8.8",
     "supertest": "^6.3.3"
   }
 }

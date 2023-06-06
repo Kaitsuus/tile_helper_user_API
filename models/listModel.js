@@ -12,7 +12,7 @@ const listSchema = mongoose.Schema({
   items: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'ListItem'
+      ref: 'ListItem',
     },
   ],
 });

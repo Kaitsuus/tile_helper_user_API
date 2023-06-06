@@ -12,7 +12,7 @@ beforeAll(async () => {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
-    useCreateIndex: true
+    useCreateIndex: true,
   });
 });
 
@@ -24,7 +24,7 @@ beforeEach(async () => {
 
   const user = new User({
     email: 'username@mail.com',
-    passwordHash
+    passwordHash,
   });
 
   await user.save();
@@ -36,7 +36,7 @@ describe('USER CREATION: USERNAME TESTS', () => {
 
     const newUser = {
       email: 'testuser@mail.fi',
-      password: 'very-secret-123'
+      password: 'very-secret-123',
     };
 
     await api
@@ -57,7 +57,7 @@ describe('USER CREATION: USERNAME TESTS', () => {
 
     const newUser = {
       email: 'username@mail.com',
-      password: 'password123'
+      password: 'password123',
     };
 
     const result = await api
@@ -78,7 +78,7 @@ describe('USER CREATION: USERNAME TESTS', () => {
 
     const newUser = {
       email: 'testmail.com',
-      password: 'password123'
+      password: 'password123',
     };
 
     const result = await api
@@ -87,8 +87,7 @@ describe('USER CREATION: USERNAME TESTS', () => {
       .expect(400)
       .expect('Content-Type', /application\/json/);
 
-    const validationErrorMessage =
-      'Invalid email format';
+    const validationErrorMessage = 'Invalid email format';
     expect(result.body.error).toContain(validationErrorMessage);
 
     const usersAtEnd = await testHelper.usersInDb();
@@ -96,28 +95,28 @@ describe('USER CREATION: USERNAME TESTS', () => {
   });
 });
 describe('USER CREATION: PASSWORD TESTS', () => {
-
   test('user creation fails if password is too short', async () => {
     const usersAtStart = await testHelper.usersInDb();
-  
+
     const newUser = {
       email: 'test@example.com',
-      password: 'pw'
+      password: 'pw',
     };
-  
+
     const response = await api
       .post('/api/users')
       .send(newUser)
       .expect(400)
       .expect('Content-Type', /application\/json/);
-  
-    expect(response.body.error).toContain('Password must be at least 7 characters long');
-  
+
+    expect(response.body.error).toContain(
+      'Password must be at least 7 characters long'
+    );
+
     const usersAtEnd = await testHelper.usersInDb();
     expect(usersAtEnd).toHaveLength(usersAtStart.length);
   });
 });
-
 
 afterAll(async () => {
   await mongoose.connection.close();

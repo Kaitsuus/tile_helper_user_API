@@ -19,31 +19,30 @@ beforeAll(async () => {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
-    useCreateIndex: true
+    useCreateIndex: true,
   });
 });
 
 beforeEach(async () => {
-    await User.deleteMany({});
-    await List.deleteMany({});
-  
-    const passwordHash = await bcrypt.hash(testMaterials.users[0].password, 10);
-    const user = new User({
-      email: testMaterials.users[0].email,
-      passwordHash,
-    });
-  
-    await user.save();
-  
-    const userForToken = {
-      email: user.email,
-      id: user._id,
-    };
-  
-    testToken = jwt.sign(userForToken, process.env.SECRET);
-    unvalidTestToken = jwt.sign(userForToken, 'wrong-secret');
-});
+  await User.deleteMany({});
+  await List.deleteMany({});
 
+  const passwordHash = await bcrypt.hash(testMaterials.users[0].password, 10);
+  const user = new User({
+    email: testMaterials.users[0].email,
+    passwordHash,
+  });
+
+  await user.save();
+
+  const userForToken = {
+    email: user.email,
+    id: user._id,
+  };
+
+  testToken = jwt.sign(userForToken, process.env.SECRET);
+  unvalidTestToken = jwt.sign(userForToken, 'wrong-secret');
+});
 
 describe('LIST CREATION:', () => {
   test('a list can be created with a valid token', async () => {

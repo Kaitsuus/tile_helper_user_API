@@ -6,8 +6,8 @@ router.use(userExtractor);
 
 router.get('/', async (request, response) => {
   const list = await List.findOne({
-    _id: request.listId, 
-    user: request.user._id
+    _id: request.listId,
+    user: request.user._id,
   }).populate('items');
 
   if (list) {
@@ -17,12 +17,12 @@ router.get('/', async (request, response) => {
   }
 });
 
-router.post('/',requireToken, async (request, response) => {
+router.post('/', requireToken, async (request, response) => {
   const { item } = request.body;
 
   const listItem = new ListItem({
     item,
-    list: request.listId
+    list: request.listId,
   });
 
   const savedListItem = await listItem.save();
@@ -31,16 +31,15 @@ router.post('/',requireToken, async (request, response) => {
     request.listId,
     { $push: { items: savedListItem._id } },
     { new: true }
-  )
-    .populate('items');
+  ).populate('items');
 
   response.status(201).json(listToUpdate);
 });
 
-router.delete('/:itemId',requireToken, async (request, response) => {
+router.delete('/:itemId', requireToken, async (request, response) => {
   const list = await List.findOne({
     _id: request.listId,
-    user: request.user._id
+    user: request.user._id,
   });
 
   if (!list) {
@@ -60,12 +59,12 @@ router.delete('/:itemId',requireToken, async (request, response) => {
   response.status(204).end();
 });
 
-router.put('/:itemId',requireToken, async (request, response) => {
+router.put('/:itemId', requireToken, async (request, response) => {
   const { item } = request.body;
 
   const listItem = await ListItem.findOne({
     _id: request.params.itemId,
-    list: request.listId
+    list: request.listId,
   });
 
   if (!listItem) {
@@ -77,6 +76,5 @@ router.put('/:itemId',requireToken, async (request, response) => {
 
   response.json(updatedListItem);
 });
-
 
 module.exports = router;
