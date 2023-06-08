@@ -1,7 +1,7 @@
-POST http://localhost:3003/api/users/647e20ff14b9452a2ba3d800/lists/647ed881a67d7d5d94995f84/items
+POST http://localhost:3003/api/lists/6481e9718d8eab20089e651f/items
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJuYW1lIiwiaWQiOiI2NDdlMjBmZjE0Yjk0NTJhMmJhM2Q4MDAiLCJpYXQiOjE2ODYwMzQ0ODd9.UXnIP8HZI85EfXWKgpzuT-j4bx5ubKkndYvzJR-GuTQ
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJ0d29AbWFpbC5jb20iLCJpZCI6IjY0ODFlOTEyOGQ4ZWFiMjAwODllNjUxNCIsImlhdCI6MTY4NjI0NDk3Nn0.1tg9uONBux8by0W8KPCuJI410Fs4xRu5K50Aji01jbQ
 
 {
-  "item": "Example Item 2"
+  "content": "Item 5"
 }

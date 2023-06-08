@@ -1,5 +1,10 @@
 const mongoose = require('mongoose');
 
+const itemSchema = mongoose.Schema({
+  _id: mongoose.Schema.Types.ObjectId,
+  content: String,
+});
+
 const listSchema = mongoose.Schema({
   title: {
     type: String,
@@ -9,12 +14,7 @@ const listSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
-  items: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'ListItem',
-    },
-  ],
+  items: [itemSchema],
 });
 
 listSchema.set('toJSON', {

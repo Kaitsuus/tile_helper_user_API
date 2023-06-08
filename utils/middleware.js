@@ -27,10 +27,10 @@ const userExtractor = async (request, response, next) => {
     );
     if (decodedToken) {
       request.user = await User.findById(decodedToken.id);
-      request.listId = request.params.listId;
     }
   }
 
+  request.listId = request.params.listId;
   next();
 };
 

@@ -8,7 +8,6 @@ require('express-async-errors');
 const listsRouter = require('./controllers/listsController');
 const usersRouter = require('./controllers/usersController');
 const loginRouter = require('./controllers/loginController');
-const itemRouter = require('./controllers/itemController');
 const { errorHandler, userExtractor } = require('./utils/middleware');
 const logger = require('./utils/logger');
 
@@ -28,9 +27,8 @@ app.use(express.static('build'));
 app.use(express.json());
 
 app.use('/api/login', loginRouter);
-app.use('/api/users/:userId/lists', userExtractor, listsRouter);
-app.use('/api/users/:userId/lists/:listId/items', userExtractor, itemRouter);
-app.use('/api/users', usersRouter);
+app.use('/api/users', userExtractor, usersRouter);
+app.use('/api/lists', userExtractor, listsRouter);
 
 if (process.env.NODE_ENV === 'test') {
   const testingRouter = require('./controllers/testing');

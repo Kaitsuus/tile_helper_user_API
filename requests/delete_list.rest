@@ -1,2 +1,2 @@
-DELETE http://localhost:3003/api/users/647f30dfed9975e3bd5dabcd/lists/647f31edb52af3315be94b74
+DELETE http://localhost:3003/api/lists/6481e9718d8eab20089e651f
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAbWFpbC5jb20iLCJpZCI6IjY0N2YzMGRmZWQ5OTc1ZTNiZDVkYWJjZCIsImlhdCI6MTY4NjExODk4M30.OSORgc615GSQA8-o-8ZAtHOUXu6tAE7n4lcdF0kibxM

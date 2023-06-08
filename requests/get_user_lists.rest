@@ -1,4 +1,0 @@
-GET http://localhost:3003/api/users/647e20ff14b9452a2ba3d800/lists/647e21ef14b9452a2ba3d808
-Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJuYW1lIiwiaWQiOiI2NDdlMjBmZjE0Yjk0NTJhMmJhM2Q4MDAiLCJpYXQiOjE2ODYwMzQ0ODd9.UXnIP8HZI85EfXWKgpzuT-j4bx5ubKkndYvzJR-GuTQ
-
