@@ -78,6 +78,124 @@ describe('LIST RETRIEVAL:', () => {
   });
 });
 
+describe('LIST DELETION:', () => {
+  test('a list can be deleted with a valid token', async () => {
+    // Create a list
+    const newList = testMaterials.lists[0];
+
+    const createdList = await api
+      .post(`/api/lists`)
+      .set('Authorization', `bearer ${testToken}`)
+      .send(newList)
+      .expect(201)
+      .expect('Content-Type', /application\/json/);
+
+    // Delete the list
+    const deleteEndpoint = `/api/lists/${createdList.body.id}`;
+    await api
+      .delete(deleteEndpoint)
+      .set('Authorization', `bearer ${testToken}`)
+      .expect(204);
+
+    // Check if the list is deleted
+    const listsAtEnd = await testHelper.listsInDb();
+    expect(listsAtEnd).toHaveLength(2);
+  });
+});
+
+describe('LIST UPDATING:', () => {
+  test('a list can be updated', async () => {
+    // Create a list
+    const newList = testMaterials.lists[0];
+
+    const createdList = await api
+      .post(`/api/lists`)
+      .set('Authorization', `bearer ${testToken}`)
+      .send(newList)
+      .expect(201)
+      .expect('Content-Type', /application\/json/);
+
+    const updateEndpoint = `/api/lists/${createdList.body.id}`;
+
+    const updatedList = { ...newList, title: 'Updated List' };
+
+    const response = await api
+      .put(updateEndpoint)
+      .set('Authorization', `bearer ${testToken}`)
+      .send(updatedList)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+
+    expect(response.body.title).toEqual(updatedList.title);
+  });
+});
+
+describe('ITEM CREATION:', () => {
+  test('an item can be added to a list with a valid token', async () => {
+    // Create a list
+    const newList = testMaterials.lists[0];
+
+    const createdList = await api
+      .post(`/api/lists`)
+      .set('Authorization', `bearer ${testToken}`)
+      .send(newList)
+      .expect(201)
+      .expect('Content-Type', /application\/json/);
+
+    // Add an item to the list
+    const newItem = { content: 'Test Item' };
+    const listId = createdList.body.id;
+    const itemEndpoint = `/api/lists/${createdList.body.id}/items`;
+
+    await api
+      .post(itemEndpoint)
+      .set('Authorization', `bearer ${testToken}`)
+      .send(newItem)
+      .expect(201)
+      .expect('Content-Type', /application\/json/);
+
+    const updatedList = await List.findById(listId);
+    expect(updatedList.items).toHaveLength(1);
+    expect(updatedList.items[0].content).toEqual(newItem.content);
+  });
+});
+
+describe('ITEM DELETION:', () => {
+  test('an item can be deleted from a list with a valid token', async () => {
+    // Create a list
+    const newList = testMaterials.lists[0];
+
+    const createdList = await api
+      .post(`/api/lists`)
+      .set('Authorization', `bearer ${testToken}`)
+      .send(newList)
+      .expect(201)
+      .expect('Content-Type', /application\/json/);
+
+    // Create a item
+    const newItem = { content: 'Test Item' };
+    const listEndpoint = `/api/lists/${createdList.body.id}/items`;
+
+    const createdItem = await api
+      .post(listEndpoint)
+      .set('Authorization', `bearer ${testToken}`)
+      .send(newItem)
+      .expect(201)
+      .expect('Content-Type', /application\/json/);
+
+    // Delete the item
+    const itemEndpoint = `/api/lists/${createdList.body.id}/items/${createdItem.body.id}`;
+    await api
+      .delete(itemEndpoint)
+      .set('Authorization', `bearer ${testToken}`)
+      .expect(204);
+
+    // Check if the item is deleted
+    const updatedList = await List.findById(listId);
+    expect(updatedList.items).toHaveLength(0);
+  });
+});
+
 afterAll(async () => {
   await mongoose.connection.close();
 });
