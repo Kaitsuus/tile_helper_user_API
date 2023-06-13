@@ -7,21 +7,11 @@ const app = require('../app');
 const api = supertest(app);
 const User = require('../models/userModel');
 const List = require('../models/listModel');
-const mongoose = require('mongoose');
-const config = require('../utils/config');
 jest.setTimeout(30000);
 
 var testToken;
 var unvalidTestToken;
 
-beforeAll(async () => {
-  await mongoose.connect(config.TEST_MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-    useCreateIndex: true,
-  });
-});
 
 beforeEach(async () => {
   await User.deleteMany({});
@@ -212,8 +202,4 @@ describe('ITEM UPDATING:', () => {
     const updatedList = await List.findById(createdList.body.id);
     expect(updatedList.items[0].content).toEqual(updatedItemContent);
   });
-});
-
-afterAll(async () => {
-  await mongoose.connection.close();
 });
