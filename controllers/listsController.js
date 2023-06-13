@@ -162,7 +162,7 @@ router.delete(
       return response.status(404).json({ error: 'item not found' });
     }
 
-    item.deleteOne();
+    list.items.pull(itemId); // Use pull() method to remove the item from the list
     await list.save();
 
     response.status(204).end();

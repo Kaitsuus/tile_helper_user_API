@@ -163,7 +163,7 @@ describe('ITEM CREATION:', () => {
 describe('ITEM DELETION:', () => {
   test('an item can be deleted from a list with a valid token', async () => {
     // Create a list
-    const newList = testMaterials.lists[0];
+    const newList = testMaterials.lists[1];
 
     const createdList = await api
       .post(`/api/lists`)
@@ -172,27 +172,45 @@ describe('ITEM DELETION:', () => {
       .expect(201)
       .expect('Content-Type', /application\/json/);
 
-    // Create a item
-    const newItem = { content: 'Test Item' };
-    const listEndpoint = `/api/lists/${createdList.body.id}/items`;
-
-    const createdItem = await api
-      .post(listEndpoint)
-      .set('Authorization', `bearer ${testToken}`)
-      .send(newItem)
-      .expect(201)
-      .expect('Content-Type', /application\/json/);
-
     // Delete the item
-    const itemEndpoint = `/api/lists/${createdList.body.id}/items/${createdItem.body.id}`;
+    const itemEndpoint = `/api/lists/${createdList.body.id}/items/${createdList.body.items[0]._id}`;
     await api
       .delete(itemEndpoint)
       .set('Authorization', `bearer ${testToken}`)
       .expect(204);
 
     // Check if the item is deleted
-    const updatedList = await List.findById(listId);
+    const updatedList = await List.findById(createdList.body.id);
     expect(updatedList.items).toHaveLength(0);
+  });
+});
+
+describe('ITEM UPDATING:', () => {
+  test('an item can be updated with a valid token', async () => {
+    // Create a list with an item
+    const newList = testMaterials.lists[1];
+
+    const createdList = await api
+      .post(`/api/lists`)
+      .set('Authorization', `bearer ${testToken}`)
+      .send(newList)
+      .expect(201)
+      .expect('Content-Type', /application\/json/);
+
+    // Update the item content
+    const updatedItemContent = 'Updated Item Content';
+    const itemEndpoint = `/api/lists/${createdList.body.id}/items/${createdList.body.items[0]._id}`;
+
+    await api
+      .put(itemEndpoint)
+      .set('Authorization', `bearer ${testToken}`)
+      .send({ content: updatedItemContent })
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+
+    // Check if the item content has been updated
+    const updatedList = await List.findById(createdList.body.id);
+    expect(updatedList.items[0].content).toEqual(updatedItemContent);
   });
 });
 
