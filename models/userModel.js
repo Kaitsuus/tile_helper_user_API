@@ -13,8 +13,16 @@ const userSchema = mongoose.Schema({
       message: 'Invalid email format',
     },
   },
-  avatar: String,
-  languagePreference: String,
+  avatar: {
+    type: String,
+    default: function() {
+      return this.email.charAt(0).toUpperCase();
+    }
+  },
+  languagePreference: {
+    type: String,
+    default: 'fi'
+  },
   passwordHash: {
     type: String,
     required: true,

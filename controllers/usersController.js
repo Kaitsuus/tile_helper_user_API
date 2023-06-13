@@ -28,7 +28,7 @@ router.get('/:id', async (request, response) => {
 });
 
 router.post('/', async (request, response) => {
-  const { email, avatar, languagePreference, password } = request.body;
+  const { email, password } = request.body;
 
   // Validate email format
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -54,8 +54,6 @@ router.post('/', async (request, response) => {
   const user = new User({
     email,
     passwordHash,
-    avatar,
-    languagePreference,
     lists: [],
   });
 
