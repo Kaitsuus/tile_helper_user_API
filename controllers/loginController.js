@@ -33,6 +33,9 @@ router.post('/', async (request, response) => {
     response.status(200).json({
       token,
       email: user.email,
+      id: user.id,
+      avatar: user.avatar,
+      languagePreference: user.languagePreference
     });
   } catch (error) {
     response.status(500).json({
