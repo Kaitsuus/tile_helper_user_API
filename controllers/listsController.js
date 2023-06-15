@@ -58,9 +58,13 @@ router.post('/', requireToken, async (request, response) => {
   }
 
   const user = request.user;
-  const itemsWithIds = request.body.items.map((item) => ({
+  const itemsWithIds = request.body.items.map(({ content }) => ({
     _id: mongoose.Types.ObjectId(),
-    content: item.content,
+    content: {
+      name: content.name,
+      amount: content.amount,
+      unit: content.unit,
+    },
   }));
 
   const list = new List({

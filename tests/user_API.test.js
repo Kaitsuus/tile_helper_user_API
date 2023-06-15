@@ -6,6 +6,7 @@ const api = supertest(app);
 const User = require('../models/userModel');
 
 jest.setTimeout(30000);
+
 beforeEach(async () => {
   await User.deleteMany({});
 
@@ -107,3 +108,58 @@ describe('USER CREATION: PASSWORD TESTS', () => {
   });
 });
 
+describe('USER UPDATE', () => {
+  let token;
+
+  beforeEach(async () => {
+    const response = await api.post('/api/login').send({
+      email: 'username@mail.com',
+      password: 'sekret',
+    });
+    token = response.body.token;
+  });
+  test('update languagePreference and password with valid token', async () => {
+    const usersAtStart = await testHelper.usersInDb();
+    const userToUpdate = usersAtStart[0];
+
+    const updatedData = {
+      password: 'testpassword123',
+      languagePreference: 'en',
+    };
+
+    const response = await api
+      .put(`/api/users/${userToUpdate.id}`)
+      .set('Authorization', `bearer ${token}`)
+      .send(updatedData)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+
+    const updatedUser = await User.findById(userToUpdate.id);
+    expect(updatedUser.languagePreference).toBe(updatedData.languagePreference);
+
+    const passwordCorrect = await bcrypt.compare(
+      updatedData.password,
+      updatedUser.passwordHash
+    );
+    expect(passwordCorrect).toBe(true);
+  });
+
+  test('update fails if token is not valid', async () => {
+    const usersAtStart = await testHelper.usersInDb();
+    const userToUpdate = usersAtStart[0];
+
+    const updatedData = {
+      password: 'testpassword123',
+      languagePreference: 'en',
+    };
+
+    const invalidToken = 'invalidToken';
+
+    await api
+      .put(`/api/users/${userToUpdate.id}`)
+      .set('Authorization', `Bearer ${invalidToken}`)
+      .send(updatedData)
+      .expect(401)
+      .expect('Content-Type', /application\/json/);
+  });
+});

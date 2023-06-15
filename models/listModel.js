@@ -2,7 +2,20 @@ const mongoose = require('mongoose');
 
 const itemSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  content: String,
+  content: {
+    name: {
+      type: String,
+      required: true,
+    },
+    amount: {
+      type: Number,
+      required: true,
+    },
+    unit: {
+      type: String,
+      required: true,
+    },
+  },
 });
 
 const listSchema = mongoose.Schema({

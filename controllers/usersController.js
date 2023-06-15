@@ -62,4 +62,38 @@ router.post('/', async (request, response) => {
   response.status(201).json(savedUser);
 });
 
+router.put('/:id', requireToken, async (request, response) => {
+  const { password, languagePreference } = request.body;
+
+  if (password && password.length < 7) {
+    return response
+      .status(400)
+      .json({ error: 'Password must be at least 7 characters long' });
+  }
+
+  if (languagePreference && !['fi', 'en'].includes(languagePreference)) {
+    return response.status(400).json({ error: 'Invalid language preference' });
+  }
+
+  const userId = request.params.id;
+  const user = await User.findById(userId);
+
+  if (!user) {
+    return response.status(404).json({ error: 'User not found' });
+  }
+
+  if (password) {
+    const saltRounds = 10;
+    const passwordHash = await bcrypt.hash(password, saltRounds);
+    user.passwordHash = passwordHash;
+  }
+
+  if (languagePreference) {
+    user.languagePreference = languagePreference;
+  }
+
+  const updatedUser = await user.save();
+  response.json(updatedUser);
+});
+
 module.exports = router;

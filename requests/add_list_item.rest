@@ -1,7 +1,7 @@
-POST http://localhost:3003/api/lists/6481e9718d8eab20089e651f/items
+POST http://localhost:3003/api/lists/648a9e9967fec9c12c057ac5/items
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJ0d29AbWFpbC5jb20iLCJpZCI6IjY0ODFlOTEyOGQ4ZWFiMjAwODllNjUxNCIsImlhdCI6MTY4NjI0NDk3Nn0.1tg9uONBux8by0W8KPCuJI410Fs4xRu5K50Aji01jbQ
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJ0d29AbWFpbC5jb20iLCJpZCI6IjY0ODgyZDkyNmQxYTg1NTVhM2RlZGVlMCIsImlhdCI6MTY4NjgwOTE0Nn0.vQ9xXlnBY_I5h-zWRcFEYInmic85h4k9zDllpfMDoHQ
 
 {
-  "content": "Item 5"
+  "content": {"name": "Item 4", "amount": 4, "unit": "piece"}
 }

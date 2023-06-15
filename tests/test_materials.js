@@ -18,16 +18,16 @@ const lists = [
   },
   {
     title: 'List 2',
-    items: [{ content: 'test-item' }],
+    items: [{ content: { name: 'Item 1', amount: 1, unit: 'piece' } }],
   },
 ];
 
 const items = [
   {
-    content: 'Item 1',
+    content: { name: 'Item 1', amount: 1, unit: 'piece' },
   },
   {
-    content: 'Item 2',
+    content: { name: 'Item 2', amount: 2, unit: 'piece' },
   },
 ];
 

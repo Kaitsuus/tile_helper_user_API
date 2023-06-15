@@ -15,13 +15,13 @@ const userSchema = mongoose.Schema({
   },
   avatar: {
     type: String,
-    default: function() {
+    default: function () {
       return this.email.charAt(0).toUpperCase();
-    }
+    },
   },
   languagePreference: {
     type: String,
-    default: 'fi'
+    default: 'fi',
   },
   passwordHash: {
     type: String,

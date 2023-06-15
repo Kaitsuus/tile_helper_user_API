@@ -35,7 +35,7 @@ router.post('/', async (request, response) => {
       email: user.email,
       id: user.id,
       avatar: user.avatar,
-      languagePreference: user.languagePreference
+      languagePreference: user.languagePreference,
     });
   } catch (error) {
     response.status(500).json({

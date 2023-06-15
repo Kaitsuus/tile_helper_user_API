@@ -12,7 +12,6 @@ jest.setTimeout(30000);
 var testToken;
 var unvalidTestToken;
 
-
 beforeEach(async () => {
   await User.deleteMany({});
   await List.deleteMany({});
@@ -54,6 +53,18 @@ describe('LIST CREATION:', () => {
     const listsAtEnd = await testHelper.listsInDb();
     expect(listsAtEnd).toHaveLength(3);
   });
+  test('a list cannot be created with an invalid token', async () => {
+    const newList = testMaterials.lists[0];
+
+    const response = await api
+      .post(`/api/lists`)
+      .set('Authorization', `bearer ${unvalidTestToken}`)
+      .send(newList)
+      .expect(401);
+
+    const listsAtEnd = await testHelper.listsInDb();
+    expect(listsAtEnd).toHaveLength(2);
+  });
 });
 
 describe('LIST RETRIEVAL:', () => {
@@ -65,6 +76,12 @@ describe('LIST RETRIEVAL:', () => {
       .expect('Content-Type', /application\/json/);
 
     expect(response.body).toHaveLength(2);
+  });
+  test('lists cannot be retrieved with an invalid token', async () => {
+    const response = await api
+      .get(`/api/lists`)
+      .set('Authorization', `bearer ${unvalidTestToken}`)
+      .expect(401);
   });
 });
 
@@ -88,6 +105,18 @@ describe('LIST DELETION:', () => {
       .expect(204);
 
     // Check if the list is deleted
+    const listsAtEnd = await testHelper.listsInDb();
+    expect(listsAtEnd).toHaveLength(2);
+  });
+  test('a list cannot be deleted with an invalid token', async () => {
+    const listsAtStart = await testHelper.listsInDb();
+    const listToDelete = listsAtStart[0];
+
+    await api
+      .delete(`/api/lists/${listToDelete.id}`)
+      .set('Authorization', `bearer ${unvalidTestToken}`)
+      .expect(401);
+
     const listsAtEnd = await testHelper.listsInDb();
     expect(listsAtEnd).toHaveLength(2);
   });
@@ -118,6 +147,18 @@ describe('LIST UPDATING:', () => {
 
     expect(response.body.title).toEqual(updatedList.title);
   });
+  test('a list cannot be updated with an invalid token', async () => {
+    const listsAtStart = await testHelper.listsInDb();
+    const listToUpdate = listsAtStart[0];
+
+    const updatedList = { ...listToUpdate, title: 'Updated List' };
+
+    await api
+      .put(`/api/lists/${listToUpdate.id}`)
+      .set('Authorization', `bearer ${unvalidTestToken}`)
+      .send(updatedList)
+      .expect(401);
+  });
 });
 
 describe('ITEM CREATION:', () => {
@@ -133,7 +174,9 @@ describe('ITEM CREATION:', () => {
       .expect('Content-Type', /application\/json/);
 
     // Add an item to the list
-    const newItem = { content: 'Test Item' };
+    const newItem = {
+      content: { name: 'test-item', amount: 4, unit: 'piece' },
+    };
     const listId = createdList.body.id;
     const itemEndpoint = `/api/lists/${createdList.body.id}/items`;
 
@@ -147,6 +190,20 @@ describe('ITEM CREATION:', () => {
     const updatedList = await List.findById(listId);
     expect(updatedList.items).toHaveLength(1);
     expect(updatedList.items[0].content).toEqual(newItem.content);
+  });
+  test('an item cannot be added to a list with an invalid token', async () => {
+    const listsAtStart = await testHelper.listsInDb();
+    const listToUpdate = listsAtStart[0];
+
+    const newItem = {
+      content: { name: 'test-item', amount: 4, unit: 'piece' },
+    };
+
+    await api
+      .post(`/api/lists/${listToUpdate.id}/items`)
+      .set('Authorization', `bearer ${unvalidTestToken}`)
+      .send(newItem)
+      .expect(401);
   });
 });
 
@@ -188,18 +245,33 @@ describe('ITEM UPDATING:', () => {
       .expect('Content-Type', /application\/json/);
 
     // Update the item content
-    const updatedItemContent = 'Updated Item Content';
+
+    const updatedItemContent = {
+      content: {
+        name: 'Updated Item Name',
+        amount: 2,
+        unit: 'Updated Unit',
+      },
+    };
     const itemEndpoint = `/api/lists/${createdList.body.id}/items/${createdList.body.items[0]._id}`;
 
     await api
       .put(itemEndpoint)
       .set('Authorization', `bearer ${testToken}`)
-      .send({ content: updatedItemContent })
+      .send(updatedItemContent)
       .expect(200)
       .expect('Content-Type', /application\/json/);
 
     // Check if the item content has been updated
     const updatedList = await List.findById(createdList.body.id);
-    expect(updatedList.items[0].content).toEqual(updatedItemContent);
+    expect(updatedList.items[0].content.name).toEqual(
+      updatedItemContent.content.name
+    );
+    expect(updatedList.items[0].content.amount).toEqual(
+      updatedItemContent.content.amount
+    );
+    expect(updatedList.items[0].content.unit).toEqual(
+      updatedItemContent.content.unit
+    );
   });
 });

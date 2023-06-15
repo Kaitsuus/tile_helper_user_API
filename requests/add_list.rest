@@ -1,12 +1,12 @@
 POST http://localhost:3003/api/lists
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJ0d29AbWFpbC5jb20iLCJpZCI6IjY0ODFlOTEyOGQ4ZWFiMjAwODllNjUxNCIsImlhdCI6MTY4NjI0NDk3Nn0.1tg9uONBux8by0W8KPCuJI410Fs4xRu5K50Aji01jbQ
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJ0d29AbWFpbC5jb20iLCJpZCI6IjY0ODgyZDkyNmQxYTg1NTVhM2RlZGVlMCIsImlhdCI6MTY4NjgwNjEzMH0.zNyJzJ0IhEboOnDyMO7jbgmmf7SF2fIWE66Hp_SWD9E
 
 {
-  "title": "user-2-test-2-list",
+  "title": "user-2-test-3-list",
   "items": [
-    {"content": "Item 1"},
-    {"content": "Item 2"},
-    {"content": "Item 3"}
+    {"content": {"name": "Item 1", "amount": 1, "unit": "piece"}},
+    {"content": {"name": "Item 2", "amount": 2, "unit": "pieces"}},
+    {"content": {"name": "Item 3", "amount": 3, "unit": "pieces"}}
   ]
 }
