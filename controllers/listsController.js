@@ -23,6 +23,15 @@ router.get('/:id', async (request, response) => {
   }
 });
 
+router.get('/user/:userId/lists', async (request, response) => {
+  const user = await User.findById(request.params.userId).populate('lists');
+  if (user) {
+    response.json(user.lists);
+  } else {
+    response.status(404).json({ error: 'user not found' });
+  }
+});
+
 // Get items of a specific list
 router.get('/:id/items', async (request, response) => {
   const list = await List.findById(request.params.id)
@@ -120,6 +129,7 @@ router.put('/:id', requireToken, async (request, response) => {
 
   response.json(updatedList);
 });
+
 
 router.post('/:listId/items', requireToken, async (request, response) => {
   if (!request.user) {
