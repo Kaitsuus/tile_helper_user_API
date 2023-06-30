@@ -96,4 +96,15 @@ router.put('/:id', requireToken, async (request, response) => {
   response.json(updatedUser);
 });
 
+router.delete('/:id', requireToken, async (request, response) => {
+  const userId = request.params.id;
+  const user = await User.findByIdAndDelete(userId);
+
+  if (!user) {
+    return response.status(404).json({ error: 'User not found' });
+  }
+
+  response.status(200).json({ message: 'User deleted successfully' });
+});
+
 module.exports = router;

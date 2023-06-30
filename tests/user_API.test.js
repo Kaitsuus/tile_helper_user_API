@@ -163,3 +163,42 @@ describe('USER UPDATE', () => {
       .expect('Content-Type', /application\/json/);
   });
 });
+
+describe('USER DELETION', () => {
+  let token;
+
+  beforeEach(async () => {
+    const response = await api.post('/api/login').send({
+      email: 'username@mail.com',
+      password: 'sekret',
+    });
+    token = response.body.token;
+  });
+  test('user deletion fails with an invalid token', async () => {
+    const usersAtStart = await testHelper.usersInDb();
+    const userToDelete = usersAtStart[0];
+    const invalidToken = 'invalidToken';
+  
+    await api
+      .delete(`/api/users/${userToDelete.id}`)
+      .set('Authorization', `bearer ${invalidToken}`)
+      .expect(401);
+  });
+  
+  test('user deletion succeeds with a valid id', async () => {
+    const usersAtStart = await testHelper.usersInDb();
+    const userToDelete = usersAtStart[0];
+  
+    await api
+      .delete(`/api/users/${userToDelete.id}`)
+      .set('Authorization', `bearer ${token}`)
+      .expect(200);
+  
+    const usersAtEnd = await testHelper.usersInDb();
+    expect(usersAtEnd).toHaveLength(usersAtStart.length - 1);
+  
+    const ids = usersAtEnd.map((u) => u.id);
+    expect(ids).not.toContain(userToDelete.id);
+  });
+
+});
