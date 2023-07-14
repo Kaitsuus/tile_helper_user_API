@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 const userSchema = mongoose.Schema({
   email: {
@@ -28,12 +29,31 @@ const userSchema = mongoose.Schema({
     required: true,
     minlength: [7, 'Password must be at least 7 characters long'],
   },
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },
+  verificationToken: {
+    type: String,
+    default: null,
+  },
+  passwordResetToken: {
+    type: String,
+    default: null,
+  },
   lists: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'List',
     },
   ],
+});
+
+userSchema.pre('save', async function (next) {
+  if (this.isModified('passwordHash')) {
+    this.passwordHash = await bcrypt.hash(this.passwordHash, 12);
+  }
+  next();
 });
 
 userSchema.set('toJSON', {

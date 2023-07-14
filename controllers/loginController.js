@@ -15,6 +15,13 @@ router.post('/', async (request, response) => {
       });
     }
 
+    // Check if the user's account is verified
+    if (!user.isVerified) {
+      return response.status(401).json({
+        error: 'Please verify your email before logging in',
+      });
+    }
+
     const passwordCorrect = await bcrypt.compare(password, user.passwordHash);
 
     if (!passwordCorrect) {

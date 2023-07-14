@@ -130,7 +130,6 @@ router.put('/:id', requireToken, async (request, response) => {
   response.json(updatedList);
 });
 
-
 router.post('/:listId/items', requireToken, async (request, response) => {
   if (!request.user) {
     return response.status(401).json({ error: 'token missing or invalid' });
