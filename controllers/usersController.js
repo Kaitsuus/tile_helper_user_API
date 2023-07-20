@@ -49,14 +49,11 @@ router.post('/', async (request, response) => {
     return response.status(400).json({ error: 'Email must be unique' });
   }
 
-  const saltRounds = 10;
-  const passwordHash = await bcrypt.hash(password, saltRounds);
-
   const verificationToken = generateVerificationToken(); // Generate a verification token
 
   const user = new User({
     email,
-    passwordHash,
+    passwordHash: password,
     verificationToken,
     lists: [],
   });
@@ -277,6 +274,40 @@ router.get('/reset-password/:token', async (request, response) => {
       response.send(message);
     });
   } catch (err) {
+    return response.status(500).json({ error: 'An error occurred' });
+  }
+});
+
+router.put('/change-password', requireToken, async (request, response) => {
+  const { oldPassword, newPassword } = request.body;
+
+  // Validate new password length
+  if (newPassword.length < 7) {
+    return response
+      .status(400)
+      .json({ error: 'New password must be at least 7 characters long' });
+  }
+
+  try {
+    // Find the user by their ID from the JWT token (from requireToken middleware)
+    const userId = request.user.id;
+    const user = await User.findById(userId);
+
+    // Check if the old password provided matches the stored password
+    const isOldPasswordValid = await bcrypt.compare(
+      oldPassword,
+      user.passwordHash
+    );
+    if (!isOldPasswordValid) {
+      return response.status(400).json({ error: 'Invalid old password' });
+    }
+
+    user.passwordHash = newPassword;
+    await user.save();
+
+    response.json({ message: 'Password changed successfully' });
+  } catch (err) {
+    console.error(err);
     return response.status(500).json({ error: 'An error occurred' });
   }
 });
