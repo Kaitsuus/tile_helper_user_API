@@ -88,13 +88,6 @@ router.get('/verify-email/:token', async (request, response) => {
 
   const user = await User.findOne({ verificationToken: token });
 
-  if (user.isVerified) {
-    return response.status(400).json({ error: 'User is already verified' });
-  }
-  if (!user) {
-    return response.status(400).json({ error: 'Invalid verification token' });
-  }
-
   // Update the user's verification status
   user.isVerified = true;
   user.verificationToken = null;
