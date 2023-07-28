@@ -91,6 +91,9 @@ router.get('/verify-email/:token', async (request, response) => {
   if (!user) {
     return response.status(400).json({ error: 'Invalid verification token' });
   }
+  if (user.isVerified) {
+    return response.status(200).send('Your email is already verified.');
+  }
 
   // Update the user's verification status
   user.isVerified = true;
