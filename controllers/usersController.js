@@ -65,7 +65,7 @@ router.post('/', async (request, response) => {
     'host'
   )}/api/users/verify-email/${verificationToken}`;
   const mailOptions = {
-    from: 'kai.jukarainen@kaijukarainen.com',
+    from: 'info@apu-app.com',
     to: email,
     subject: 'Email Verification',
     text: `Click the following link to verify your email: ${verificationLink}`,
@@ -137,7 +137,7 @@ router.post('/request-verification-email', async (request, response) => {
     'host'
   )}/api/users/verify-email/${verificationToken}`;
   const mailOptions = {
-    from: 'kai.jukarainen@kaijukarainen.com',
+    from: 'info@apu-app.com',
     to: email,
     subject: 'Email Verification',
     text: `Click the following link to verify your email: ${verificationLink}`,
@@ -179,7 +179,7 @@ router.post('/request-new-password', async (request, response) => {
     'host'
   )}/api/users/reset-password/${tempToken}`;
   const mailOptions = {
-    from: 'kai.jukarainen@kaijukarainen.com',
+    from: 'info@apu-app.com',
     to: email,
     subject: 'Password Reset Request',
     text: `Click the following link to reset your password: ${passwordResetLink}`,
@@ -247,7 +247,7 @@ router.get('/reset-password/:token', async (request, response) => {
 
     // Send the new password to the user via email
     const mailOptions = {
-      from: 'kai.jukarainen@kaijukarainen.com',
+      from: 'info@apu-app.com',
       to: user.email,
       subject: 'Password Reset',
       text: `Your new password is: ${newPassword}. Please change it next time you log in.`,
