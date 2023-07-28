@@ -88,6 +88,38 @@ router.get('/verify-email/:token', async (request, response) => {
 
   const user = await User.findOne({ verificationToken: token });
 
+  if (!user) {
+    const message = `
+    <html>
+      <head>
+        <title>Email Verification</title>
+      </head>
+      <body>
+        <h1>Error</h1>
+        <p>Invalid verification token. If you registered via Hotmail or Outlook, this error might be invalid and you can try logging in.</p>
+        <p>If you cant login and error persist. Please contact support at info@apu-app.com</p>
+      </body>
+    </html>
+    `;
+    return response.status(400).send(message);
+  }
+
+  if (user.isVerified) {
+    const message = `
+    <html>
+      <head>
+        <title>Email Verification</title>
+      </head>
+      <body>
+        <h1>Error</h1>
+        <p>User is already verified. If you registered via Hotmail or Outlook, this error might be invalid and you can try logging in.</p>
+        <p>If you cant login and error persist. Please contact support at info@apu-app.com</p>
+      </body>
+    </html>
+    `;
+    return response.status(400).send(message);
+  }
+  
   // Update the user's verification status
   user.isVerified = true;
   user.verificationToken = null;
